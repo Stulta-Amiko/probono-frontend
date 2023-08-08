@@ -1,4 +1,10 @@
+.auth {
+    border-top: 5rem;
+}
+
 .top-auth {
+    margin-top: calc(11% + 10px);
+    margin-bottom: calc(11% + 10px);
     display: flex;
     justify-content: center;
 }

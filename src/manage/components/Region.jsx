@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Select } from 'antd'
 
 const Option = Select
@@ -12,7 +12,11 @@ const Region = (props) => {
     )
   }
   return (
-    <Select placeholder='지역을 선택해 주세요' allowClear>
+    <Select
+      placeholder='지역을 선택해 주세요'
+      onChange={props.onChange}
+      allowClear
+    >
       {props.items.map((region) => (
         <Option value={region.name}>{region.name}</Option>
       ))}

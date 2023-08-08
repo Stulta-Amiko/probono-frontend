@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import MainNavigation from './shared/components/Navigation/MainNavigation'
 import Auth from './manage/pages/Auth'
-import Register from './manage/pages/Register'
 import ManageClient from './users/pages/ManageClient'
 
 function App() {
