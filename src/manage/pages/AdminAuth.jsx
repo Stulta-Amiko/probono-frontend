@@ -10,8 +10,9 @@ import { AuthContext } from '../../context/auth-context'
 
 import './Auth.css'
 import RegisterIn from '../components/RegisterIn'
+import Authority from './Authority'
 
-const Auth = (props) => {
+const AdminAuth = (props) => {
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo)
   }
@@ -146,12 +147,17 @@ const Auth = (props) => {
               onFinishFailed={onFinishFailed}
               autoComplete='off'
             >
-              {isLoding && <Spin asOverlay />}
-              {!isLoginMode && <RegisterIn />}
-              {!!isLoginMode && <AuthIn />}
-              <Button type='link' htmlType='button' onClick={switchModeHandler}>
-                {isLoginMode ? '회원가입' : '로그인으로 돌아가기'}
-              </Button>
+              <Authority />
+              <Form.Item
+                wrapperCol={{
+                  offset: 8,
+                  span: 16,
+                }}
+              >
+                <Button type='primary' htmlType='submit'>
+                  가입하기
+                </Button>
+              </Form.Item>
             </Form>
           </Card>
         </div>
@@ -160,4 +166,4 @@ const Auth = (props) => {
   )
 }
 
-export default Auth
+export default AdminAuth

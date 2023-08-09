@@ -1,12 +1,6 @@
 import React from 'react'
 import { Button, Checkbox, Form, Input } from 'antd'
 
-const onFinish = (values) => {
-  console.log('Success:', values)
-}
-const onFinishFailed = (errorInfo) => {
-  console.log('Failed:', errorInfo)
-}
 const AuthIn = () => (
   <div>
     <Form.Item

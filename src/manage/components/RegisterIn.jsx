@@ -1,17 +1,28 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button, Form, Input } from 'antd'
 
+import { useHttpClient } from '../../shared/hooks/http-hook'
 import Region from './Region'
-
-const REGION = [
-  {
-    id: 1,
-    name: '지역명',
-  },
-]
 
 const RegisterIn = () => {
   const [region, setRegion] = useState(null)
+
+  const [loadedRegions, setLoadedRegions] = useState()
+
+  const { isLoading, error, sendRequest, clearError } = useHttpClient()
+
+  useEffect(() => {
+    const fetchRegions = async () => {
+      try {
+        const responseData = await sendRequest(
+          process.env.REACT_APP_BACKEND_ADDRESS + '/region'
+        )
+        console.log(responseData.regions)
+        setLoadedRegions(responseData.regions)
+      } catch (err) {}
+    }
+    fetchRegions()
+  }, [sendRequest])
 
   const setRegionHandler = (value) => {
     console.log(value)
@@ -35,7 +46,6 @@ const RegisterIn = () => {
       >
         <Input />
       </Form.Item>
-
       <Form.Item
         label='이름'
         name='name'
@@ -49,13 +59,13 @@ const RegisterIn = () => {
       >
         <Input />
       </Form.Item>
-
       <Form.Item
         name='password'
         label='비밀번호'
         rules={[
           { required: true, message: '비밀번호를 입력해주세요.' },
           { min: 8, message: '비밀번호는 8자 이상이어야 합니다.' },
+          { max: 16, message: '비밀번호는 16자 이하여야 합니다.' },
           {
             pattern:
               /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/,
@@ -67,7 +77,6 @@ const RegisterIn = () => {
       >
         <Input.Password />
       </Form.Item>
-
       <Form.Item
         name='confirm'
         label='비밀번호 확인'
@@ -90,7 +99,6 @@ const RegisterIn = () => {
       >
         <Input.Password />
       </Form.Item>
-
       <Form.Item
         name='region'
         label='지역명'
@@ -101,9 +109,11 @@ const RegisterIn = () => {
           },
         ]}
       >
-        <Region items={REGION} onChange={setRegionHandler} />
+        {console.log(loadedRegions)}
+        {!isLoading && loadedRegions && (
+          <Region items={loadedRegions} onChange={setRegionHandler} />
+        )}
       </Form.Item>
-
       <Form.Item
         wrapperCol={{
           offset: 8,
