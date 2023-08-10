@@ -1,9 +1,35 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Select, Form } from 'antd'
+
+import { useHttpClient } from '../../shared/hooks/http-hook'
+import AdminManage from './AdminManage'
 
 const Option = Select
 
 const Authority = (props) => {
+  const [admin, setAdmin] = useState(null)
+
+  const [loadedAdmins, setLoadedAdmins] = useState()
+
+  const { isLoading, error, sendRequest, clearError } = useHttpClient()
+
+  useEffect(() => {
+    const fetchAdmins = async () => {
+      try {
+        const responseData = await sendRequest(
+          process.env.REACT_APP_BACKEND_ADDRESS + '/admin'
+        )
+        console.log(responseData.admins)
+        setLoadedAdmins(responseData.admins)
+      } catch (err) {}
+    }
+    fetchAdmins()
+  }, [sendRequest])
+
+  const setAdminHandler = (value) => {
+    console.log(value)
+    setAdmin(value)
+  }
   return (
     <div>
       <Form.Item
@@ -16,10 +42,9 @@ const Authority = (props) => {
           },
         ]}
       >
-        <Select placeholder='이름' onChange={props.onChange} allowClear>
-          <Option value={true}>설정</Option>
-          <Option value={false}>해제</Option>
-        </Select>
+        {!isLoading && loadedAdmins && (
+          <AdminManage items={loadedAdmins} onChange={setAdminHandler} />
+        )}
       </Form.Item>
       <Form.Item
         name='is_super'

@@ -19,54 +19,11 @@ const Auth = (props) => {
   const [form] = Form.useForm()
   const auth = useContext(AuthContext)
   const [isLoginMode, setIsLoginMode] = useState(true)
-  const { isLoding, error, sendRequest } = useHttpClient()
+  const [modalDisplayed, setModalDisplayed] = useState(false)
+  const { isLoding, error, sendRequest, clearError } = useHttpClient()
   let navigate = useNavigate()
 
-  const [formState, setFormData] = useForm(
-    {
-      email: {
-        value: '',
-        isValid: true,
-      },
-      password: {
-        value: '',
-        isValid: true,
-      },
-    },
-    true
-  )
-
   const switchModeHandler = () => {
-    if (!isLoginMode) {
-      setFormData(
-        {
-          ...formState.inputs,
-          name: undefined,
-          pwdCofirm: undefined,
-          region: undefined,
-        },
-        formState.inputs.email.isValid && formState.inputs.password.isValid
-      )
-    } else {
-      setFormData(
-        {
-          ...formState.inputs,
-          name: {
-            value: '',
-            isValid: true,
-          },
-          pwdCofirm: {
-            value: '',
-            isValid: true,
-          },
-          region: {
-            value: '',
-            isValid: true,
-          },
-        },
-        true
-      )
-    }
     setIsLoginMode((prevMode) => !prevMode)
   }
 
@@ -82,6 +39,7 @@ const Auth = (props) => {
           }),
           {
             'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + auth.token,
           }
         )
         auth.login(responseData.adminId, responseData.token)
@@ -106,6 +64,7 @@ const Auth = (props) => {
           }),
           {
             'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + auth.token,
           }
         )
         auth.login(responseData.adminId, responseData.token)
@@ -114,11 +73,18 @@ const Auth = (props) => {
     }
   }
 
-  const ErrorModal = (props) => {
-    Modal.error({
-      title: props.error,
-      content: props.error,
-    })
+  const ErrorModal = () => {
+    if (!modalDisplayed) {
+      setModalDisplayed(true)
+      Modal.error({
+        title: error,
+        content: null,
+        onOk: () => {
+          setModalDisplayed(false)
+          clearError()
+        },
+      })
+    }
   }
 
   return (

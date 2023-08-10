@@ -29,22 +29,58 @@ const MainNavigation = () => {
       disabled: !auth.isLoggedin,
     },
     {
-      label: (
-        <NavLink to='/' exact>
-          유저 추가하기
-        </NavLink>
-      ),
+      label: '유저 추가하기',
       key: 'addUser',
+      children: [
+        {
+          label: (
+            <NavLink to='/authority' exact>
+              개인 추가하기
+            </NavLink>
+          ),
+          key: 'addUserIndi',
+        },
+        {
+          label: (
+            <NavLink to='/authority' exact>
+              단체로 추가하기
+            </NavLink>
+          ),
+          key: 'addUserCsv',
+        },
+      ],
       icon: <UserAddOutlined />,
     },
     {
-      label: (
-        <NavLink to='/authority' exact>
-          관리자 기능 추가하기
-        </NavLink>
-      ),
-      key: 'addAuth',
+      label: '관리자 권한 관리하기',
+      key: 'manageAuth',
       icon: <DesktopOutlined />,
+      children: [
+        {
+          label: (
+            <NavLink to='/authority' exact>
+              관리자 기능 추가하기
+            </NavLink>
+          ),
+          key: 'addAuth',
+        },
+        {
+          label: (
+            <NavLink to='/authority' exact>
+              관리자 기능 수정하기
+            </NavLink>
+          ),
+          key: 'patchAuth',
+        },
+        {
+          label: (
+            <NavLink to='/authority' exact>
+              관리자 기능 삭제하기
+            </NavLink>
+          ),
+          key: 'deleteAuth',
+        },
+      ],
     },
     {
       label: auth.isLoggedin ? (
