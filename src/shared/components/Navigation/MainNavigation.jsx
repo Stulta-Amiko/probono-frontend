@@ -34,7 +34,7 @@ const MainNavigation = () => {
       children: [
         {
           label: (
-            <NavLink to='/authority' exact>
+            <NavLink to='/adduser' exact>
               개인 추가하기
             </NavLink>
           ),
@@ -99,8 +99,6 @@ const MainNavigation = () => {
 
   const [current, setCurrent] = useState('mail')
   const onClick = (e) => {
-    console.log('click ', e)
-    console.log(auth.isLoggedin)
     setCurrent(e.key)
   }
   return (

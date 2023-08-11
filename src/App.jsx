@@ -12,6 +12,7 @@ import MainNavigation from './shared/components/Navigation/MainNavigation'
 import Auth from './manage/pages/Auth'
 import ManageClient from './users/pages/ManageClient'
 import AdminAuth from './manage/pages/AdminAuth'
+import AddUser from './users/pages/AddUser'
 
 function App() {
   const { token, login, logout, userId } = useAuth()
@@ -23,6 +24,7 @@ function App() {
         <Route path='/auth' exact element={<Auth />} />
         <Route path='/manage' exact element={<ManageClient />} />
         <Route path='/authority' exact element={<AdminAuth />} />
+        <Route path='/adduser' exact element={<AddUser />} />
         <Route path='*' element={<Navigate to='/' replace />} />
       </Routes>
     )
