@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Space, Table, Button } from 'antd'
+import { AuthContext } from '../../context/auth-context'
 import { useHttpClient } from '../../shared/hooks/http-hook'
 
 const columns = [
@@ -12,22 +13,22 @@ const columns = [
   {
     title: '주소',
     dataIndex: 'address',
-    key: 'age',
+    key: 'address',
   },
   {
     title: '생년월일',
     dataIndex: 'birthDate',
-    key: 'address',
+    key: 'birthDate',
   },
   {
     title: '체크현황',
     dataIndex: 'checkDate',
-    key: 'address',
+    key: 'checkDate',
   },
   {
     title: '특이사항',
     dataIndex: 'remark',
-    key: 'address',
+    key: 'remark',
   },
   {
     title: '알림보내기',
@@ -48,29 +49,26 @@ const columns = [
   },
 ]
 
-const getRandomIntInclusive = (min, max) => {
-  min = Math.ceil(min)
-  max = Math.floor(max)
-  return Math.floor(Math.random() * (max - min + 1)) + min
-} //데이터를 위한 임시 난수발생기, 백엔드 연결 후 삭제요망
+const LoadUsers = (props) => {
+  const data = []
+  const auth = useContext(AuthContext)
+  const [loadedUsers, setLoadedUsers] = useState()
 
-const data = []
-for (let i = 0; i < 46; i++) {
-  data.push({
-    key: i, // 추후 백엔드 연결시 key = database의 id값으로 설정
-    id: i,
-    name: `John Brown ${i}`,
-    birthDate: `${getRandomIntInclusive(1900, 1970)}-${getRandomIntInclusive(
-      1,
-      12
-    )}-${getRandomIntInclusive(1, 31)}`,
-    checkDate: '2023-08-07T13:01:42.000Z',
-    remark: `특이사항 ${i}`,
-    address: `주소 ${i}`,
-  })
-}
+  const { isLoading, error, sendRequest, clearError } = useHttpClient()
 
-const ManageClient = () => {
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const responseData = await sendRequest(
+          process.env.REACT_APP_BACKEND_ADDRESS + '/users/aid/' + auth.userId
+        )
+        console.log(responseData.users)
+        setLoadedUsers(responseData.users)
+      } catch (err) {}
+    }
+    fetchUsers()
+  }, [sendRequest])
+
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const onSelectChange = (newSelectedRowKeys) => {
     console.log('selectedRowKeys changed: ', newSelectedRowKeys)
@@ -86,9 +84,25 @@ const ManageClient = () => {
       Table.SELECTION_NONE,
     ],
   }
-
+  if (!loadedUsers) {
+    return (
+      <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+    )
+  }
+  loadedUsers.map((user) =>
+    data.push({
+      key: user.id,
+      id: user.id,
+      name: user.name,
+      birthDate: user.birthdate,
+      checkDate: user.checkdate,
+      remark: user.remark,
+      address: user.address,
+    })
+  )
   return (
     <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
   )
 }
-export default ManageClient
+
+export default LoadUsers

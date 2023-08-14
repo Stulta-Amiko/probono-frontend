@@ -22,20 +22,26 @@ const AddUser = (props) => {
 
   const submitHandler = async (values, event) => {
     try {
-      let adminId = await sendRequest(
-        process.env.REACT_APP_BACKEND_ADDRESS +
-          `/admin/name/${values.user_name}`,
+      console.log(values.birthdate)
+      let regionId = await sendRequest(
+        process.env.REACT_APP_BACKEND_ADDRESS + `/region/name/${values.region}`,
         'GET'
       )
-      console.log(adminId.adminId)
+      console.log(
+        await sendRequest(
+          process.env.REACT_APP_BACKEND_ADDRESS + `/users/aid/${auth.userId}`,
+          'GET'
+        )
+      )
       const responseData = await sendRequest(
-        process.env.REACT_APP_BACKEND_ADDRESS + '/admin/authority',
+        process.env.REACT_APP_BACKEND_ADDRESS + '/users',
         'POST',
         JSON.stringify({
-          is_super: values.is_super,
-          is_admin: values.is_admin,
-          is_user: values.is_user,
-          admin_id: adminId.adminId,
+          name: values.name,
+          address: values.address,
+          birthdate: values.birthdate,
+          phone_number: values.phoneNumber,
+          region_id: regionId.region_id,
         }),
         {
           'Content-Type': 'application/json',

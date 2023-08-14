@@ -13,6 +13,7 @@ import Auth from './manage/pages/Auth'
 import ManageClient from './users/pages/ManageClient'
 import AdminAuth from './manage/pages/AdminAuth'
 import AddUser from './users/pages/AddUser'
+import LoadUsers from './users/components/LoadUsers'
 
 function App() {
   const { token, login, logout, userId } = useAuth()
@@ -22,7 +23,7 @@ function App() {
     routes = (
       <Routes>
         <Route path='/auth' exact element={<Auth />} />
-        <Route path='/manage' exact element={<ManageClient />} />
+        <Route path='/manage' exact element={<LoadUsers />} />
         <Route path='/authority' exact element={<AdminAuth />} />
         <Route path='/adduser' exact element={<AddUser />} />
         <Route path='*' element={<Navigate to='/' replace />} />

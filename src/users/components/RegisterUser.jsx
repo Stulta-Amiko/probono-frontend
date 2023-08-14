@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Form, Input, InputNumber } from 'antd'
+import { Button, Form, Input, InputNumber, DatePicker } from 'antd'
 
 import { useHttpClient } from '../../shared/hooks/http-hook'
 import Region from '../../manage/components/Region'
@@ -62,12 +62,11 @@ const RegisterUser = () => {
         rules={[
           {
             required: true,
-            message: '이름을 입력해주세요.',
+            message: '생일을 입력해주세요.',
           },
-          { min: 2, message: '이름은 2자 이상이어야 합니다.' },
         ]}
       >
-        <Input />
+        <DatePicker showTime format='YYYY-MM-DDTHH:mm:ssZ' />
       </Form.Item>
       <Form.Item
         label='전화번호'
@@ -79,9 +78,7 @@ const RegisterUser = () => {
           },
         ]}
       >
-        <InputNumber
-          rules={[{ type: 'number', message: '숫자만 입력해주세요.' }]}
-        />
+        <Input placeholder='Basic usage' type='number' />
       </Form.Item>
 
       <Form.Item
